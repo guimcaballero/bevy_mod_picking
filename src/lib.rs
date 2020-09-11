@@ -65,7 +65,7 @@ impl PickIntersection {
         }
     }
 
-    pub fn entity(&self) -> Entity {
+    pub fn get_entity(&self) -> Entity {
         self.entity
     }
 
