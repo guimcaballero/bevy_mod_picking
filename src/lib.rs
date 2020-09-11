@@ -65,6 +65,10 @@ impl PickIntersection {
         }
     }
 
+    pub fn entity(&self) -> Entity {
+        self.entity
+    }
+
     pub fn get_pick_coord_ndc(&self) -> Vec3 {
         self.pick_coord_ndc
     }
