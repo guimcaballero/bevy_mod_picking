@@ -226,6 +226,7 @@ fn update_debug_cursor_position(
     // Set the cursor translation to the top pick's world coordinates
     if let Some(top_pick) = pick_state.top() {
         let pos = top_pick.get_pick_coord_world(projection_matrix, view_matrix);
+        dbg!(top_pick);
 
         for (_, mut translation) in &mut query.iter() {
             translation.0 = pos;
@@ -354,7 +355,7 @@ fn pick_mesh(
     meshes: Res<Assets<Mesh>>,
     windows: Res<Windows>,
     // Queries
-    mut mesh_query: Query<(&Handle<Mesh>, &Transform, &mut PickableMesh, Entity)>,
+    mut mesh_query: Query<(&Handle<Mesh>, &Transform, &mut PickableMesh, Entity, &Draw)>,
     mut camera_query: Query<(&Transform, &Camera)>,
 ) {
     // Get the cursor position
@@ -383,7 +384,11 @@ fn pick_mesh(
     pick_state.topmost_pick = None;
 
     // Iterate through each pickable mesh in the scene
-    for (mesh_handle, transform, mut pickable, entity) in &mut mesh_query.iter() {
+    for (mesh_handle, transform, mut pickable, entity, draw) in &mut mesh_query.iter() {
+        if !draw.is_visible {
+            continue;
+        }
+
         // Use the mesh handle to get a reference to a mesh asset
         if let Some(mesh) = meshes.get(mesh_handle) {
             if mesh.primitive_topology != PrimitiveTopology::TriangleList {
